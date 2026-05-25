@@ -83,15 +83,16 @@
     document.getElementById(styleId)?.remove();
 
     const css = `
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-
         :root {
-            --rb-bg: #03050f; --rb-surface: #070d1a; --rb-border: #0d2340;
-            --rb-primary: #00d4ff; --rb-primary-dim: rgba(0,212,255,0.15);
-            --rb-accent: #7c3aed; --rb-text: #c8e6ff; --rb-muted: #4a7a9b;
-            --rb-danger: #ff3366; --rb-font: 'Orbitron', monospace;
-            --rb-mono: 'Share Tech Mono', monospace;
-            --rb-glow: 0 0 12px rgba(0,212,255,0.35);
+            --rb-bg: #1c1c1e;
+            --rb-surface: #2c2c2e;
+            --rb-border: rgba(255,255,255,0.1);
+            --rb-border-hi: rgba(255,255,255,0.18);
+            --rb-text: #f5f5f7;
+            --rb-muted: #98989f;
+            --rb-muted-2: #636366;
+            --rb-danger: #ff453a;
+            --rb-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
         }
 
         #${APP_ID}_overlay {
@@ -101,39 +102,28 @@
 
         .rb-panel {
             background: var(--rb-bg); color: var(--rb-text);
-            padding: 0; border-radius: 4px; width: 320px;
-            border: 1px solid var(--rb-primary);
-            box-shadow: var(--rb-glow), inset 0 0 40px rgba(0,212,255,0.03);
+            padding: 0; border-radius: 20px; width: 310px;
+            border: 1px solid var(--rb-border-hi);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08);
             display: flex; flex-direction: column; gap: 0;
             overflow: hidden; position: relative;
             font-family: var(--rb-font);
             animation: rbFadeIn 0.2s ease-out;
         }
 
-        .rb-panel::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--rb-primary), var(--rb-accent), transparent);
-            animation: scanline 3s linear infinite;
-        }
-
-        .rb-panel::after {
-            content: ''; position: absolute; inset: 0; pointer-events: none;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,0.015) 2px, rgba(0,212,255,0.015) 4px);
-        }
-
         .rb-minimized-bubble {
-            width: 50px; height: 50px;
-            background: var(--rb-bg); border: 1px solid var(--rb-primary);
-            border-radius: 4px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: var(--rb-glow);
-            font-size: 20px; animation: rbPopIn 0.3s;
+            width: 48px; height: 48px;
+            background: var(--rb-bg); border: 1px solid var(--rb-border-hi);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            font-size: 20px; animation: rbPopIn 0.25s ease-out;
             user-select: none; z-index: 1000000;
-            font-family: var(--rb-font); color: var(--rb-primary);
+            color: var(--rb-text);
         }
 
         .rb-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 14px; background: rgba(0,212,255,0.05);
+            padding: 12px 16px; background: rgba(255,255,255,0.03);
             border-bottom: 1px solid var(--rb-border);
             cursor: move; user-select: none;
         }
@@ -141,112 +131,106 @@
         .rb-header-controls { display: flex; gap: 8px; align-items: center; }
 
         .rb-win-btn {
-            cursor: pointer; font-size: 10px; width: 24px; height: 24px;
+            cursor: pointer; font-size: 11px; width: 26px; height: 26px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 2px; font-weight: 700; font-family: var(--rb-font);
-            border: 1px solid; transition: all 0.15s; position: relative; z-index: 1000;
+            border-radius: 99px; font-weight: 700;
+            border: 1px solid; transition: all 0.2s; position: relative; z-index: 1000;
         }
-        .rb-btn-min { color: var(--rb-primary); border-color: var(--rb-primary); background: var(--rb-primary-dim); }
-        .rb-btn-min:hover { background: rgba(0,212,255,0.3); box-shadow: var(--rb-glow); }
-        .rb-btn-close { color: var(--rb-danger); border-color: var(--rb-danger); background: rgba(255,51,102,0.1); }
-        .rb-btn-close:hover { background: rgba(255,51,102,0.25); box-shadow: 0 0 12px rgba(255,51,102,0.5); }
+        .rb-btn-min { color: var(--rb-muted); border-color: var(--rb-border); background: var(--rb-surface); }
+        .rb-btn-min:hover { background: rgba(255,255,255,0.15); border-color: var(--rb-border-hi); color: #fff; }
+        .rb-btn-close { color: var(--rb-danger); border-color: rgba(255,69,58,0.3); background: rgba(255,69,58,0.1); }
+        .rb-btn-close:hover { background: rgba(255,69,58,0.22); border-color: rgba(255,69,58,0.5); }
 
         .rb-section {
-            padding: 12px 14px; border-bottom: 1px solid var(--rb-border);
+            padding: 14px 16px; border-bottom: 1px solid var(--rb-border);
             display: flex; flex-direction: column; gap: 8px;
         }
 
         .rb-label {
-            font-size: 9px; color: var(--rb-muted); letter-spacing: 2px;
-            text-transform: uppercase; font-family: var(--rb-font); margin-bottom: 2px;
+            font-size: 11px; color: var(--rb-muted-2); letter-spacing: 0.03em;
+            text-transform: uppercase; font-weight: 600; margin-bottom: 2px;
         }
 
         .rb-error-modal {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--rb-bg); color: var(--rb-text); padding: 24px;
-            border-radius: 4px; width: 300px; text-align: center;
-            border: 1px solid var(--rb-danger); z-index: 10000000;
-            font-family: var(--rb-font); box-shadow: 0 0 20px rgba(255,51,102,0.3);
+            background: var(--rb-bg); color: var(--rb-text); padding: 28px 24px;
+            border-radius: 20px; width: 300px; text-align: center;
+            border: 1px solid rgba(255,69,58,0.3); z-index: 10000000;
+            font-family: var(--rb-font); box-shadow: 0 24px 60px rgba(0,0,0,0.7);
         }
 
         .rb-title {
-            font-size: 11px; font-weight: 900; color: var(--rb-primary);
-            text-shadow: var(--rb-glow); letter-spacing: 3px; text-transform: uppercase;
-            font-family: var(--rb-font);
+            font-size: 13px; font-weight: 700; color: #fff;
+            letter-spacing: -0.02em;
         }
 
         .rb-field-badge {
-            font-size: 9px; padding: 2px 7px; border-radius: 2px;
-            font-weight: 700; margin-left: 8px; font-family: var(--rb-font); letter-spacing: 1px;
+            font-size: 10px; padding: 2px 9px; border-radius: 99px;
+            font-weight: 600; margin-left: 8px; letter-spacing: 0.02em;
         }
-        .rb-badge-title { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid #f59e0b; }
-        .rb-badge-body { background: var(--rb-primary-dim); color: var(--rb-primary); border: 1px solid var(--rb-primary); }
+        .rb-badge-title { background: rgba(255,159,10,0.15); color: #ff9f0a; border: 1px solid rgba(255,159,10,0.3); }
+        .rb-badge-body { background: rgba(255,255,255,0.1); color: var(--rb-muted); border: 1px solid var(--rb-border); }
 
         .rb-textarea, .rb-input {
             background: var(--rb-surface); border: 1px solid var(--rb-border); color: var(--rb-text);
-            border-radius: 3px; font-size: 12px; font-family: var(--rb-mono);
+            border-radius: 12px; font-size: 13px; font-family: var(--rb-font);
             outline: none; width: 100%; box-sizing: border-box;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s;
         }
-        .rb-textarea:focus, .rb-input:focus { border-color: var(--rb-primary); box-shadow: 0 0 8px rgba(0,212,255,0.2); }
-        .rb-textarea { padding: 10px; height: 80px; resize: none; }
-        .rb-input { padding: 8px 10px; margin-bottom: 0; }
+        .rb-textarea:focus, .rb-input:focus { border-color: var(--rb-border-hi); }
+        .rb-textarea { padding: 10px 12px; height: 84px; resize: none; }
+        .rb-input { padding: 9px 12px; }
 
         .rb-chips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .rb-chip {
             background: var(--rb-surface); border: 1px solid var(--rb-border); color: var(--rb-muted);
-            padding: 7px 0; border-radius: 3px; font-size: 9px; font-weight: 700;
+            padding: 8px 0; border-radius: 12px; font-size: 11px; font-weight: 600;
             cursor: pointer; text-align: center; font-family: var(--rb-font);
-            letter-spacing: 1px; transition: all 0.15s; text-transform: uppercase;
+            transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.03em;
         }
-        .rb-chip:hover { border-color: var(--rb-primary); color: var(--rb-primary); }
-        .rb-chip.active { background: var(--rb-primary-dim); color: var(--rb-primary); border-color: var(--rb-primary); box-shadow: var(--rb-glow); }
+        .rb-chip:hover { border-color: var(--rb-border-hi); color: #fff; }
+        .rb-chip.active { background: #fff; color: #000; border-color: transparent; }
 
         .rb-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
         .rb-btn {
-            border: 1px solid; padding: 8px 12px; border-radius: 3px; cursor: pointer;
-            font-weight: 700; font-size: 10px; font-family: var(--rb-font);
-            letter-spacing: 1.5px; display: flex; align-items: center; justify-content: center;
-            gap: 6px; transition: all 0.15s; text-transform: uppercase;
+            border: 1px solid; padding: 9px 12px; border-radius: 99px; cursor: pointer;
+            font-weight: 600; font-size: 12px; font-family: var(--rb-font);
+            letter-spacing: 0.01em; display: flex; align-items: center; justify-content: center;
+            gap: 6px; transition: all 0.2s; text-transform: uppercase;
         }
-        .rb-btn-primary { background: rgba(0,212,255,0.12); color: var(--rb-primary); border-color: var(--rb-primary); }
-        .rb-btn-primary:hover { background: rgba(0,212,255,0.25); box-shadow: var(--rb-glow); }
-        .rb-btn-ai { width: 100%; background: rgba(124,58,237,0.15); color: #a78bfa; border-color: #7c3aed; margin-bottom: 0; }
-        .rb-btn-ai:hover { background: rgba(124,58,237,0.3); box-shadow: 0 0 12px rgba(124,58,237,0.4); }
+        .rb-btn-primary { background: #fff; color: #000; border-color: transparent; }
+        .rb-btn-primary:hover { background: #e5e5ea; }
+        .rb-btn-ai { width: 100%; background: var(--rb-surface); color: var(--rb-text); border-color: var(--rb-border); margin-bottom: 0; }
+        .rb-btn-ai:hover { background: rgba(255,255,255,0.1); border-color: var(--rb-border-hi); color: #fff; }
         .rb-btn-action { background: var(--rb-surface); color: var(--rb-muted); border-color: var(--rb-border); }
-        .rb-btn-action:hover { color: var(--rb-text); border-color: var(--rb-muted); }
+        .rb-btn-action:hover { color: #fff; border-color: var(--rb-border-hi); }
 
-        .rb-progress-bar { height: 3px; background: linear-gradient(90deg, var(--rb-accent), var(--rb-primary)); width: 0%; transition: width 0.1s linear; box-shadow: 0 0 6px var(--rb-primary); }
+        .rb-progress-bar { height: 2px; background: #fff; width: 0%; transition: width 0.1s linear; opacity: 0.6; }
 
         .rb-toast {
             position: fixed; top: 10%; left: 50%; transform: translateX(-50%);
-            background: var(--rb-bg); color: var(--rb-primary); padding: 8px 16px;
-            border-radius: 3px; z-index: 1000000; border: 1px solid var(--rb-primary);
+            background: var(--rb-bg); color: #fff; padding: 9px 18px;
+            border-radius: 99px; z-index: 1000000; border: 1px solid var(--rb-border-hi);
             display: flex; gap: 8px; pointer-events: none; font-family: var(--rb-font);
-            font-size: 11px; letter-spacing: 1px; box-shadow: var(--rb-glow);
+            font-size: 12px; font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
         }
 
         .rb-highlighter {
-            position: absolute; pointer-events: none; border: 1px solid var(--rb-primary);
-            background: rgba(0,212,255,0.08); z-index: 999990;
+            position: absolute; pointer-events: none; border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.05); z-index: 999990; border-radius: 8px;
         }
 
         .rb-footer {
-            padding: 8px 14px; text-align: center; font-size: 9px;
-            color: var(--rb-muted); font-family: var(--rb-mono);
-            letter-spacing: 1px; background: rgba(0,212,255,0.02);
+            padding: 10px 16px; text-align: center; font-size: 11px;
+            color: var(--rb-muted-2); font-family: var(--rb-font);
         }
-        .rb-footer a { color: var(--rb-primary); text-decoration: none; }
+        .rb-footer a { color: var(--rb-muted); text-decoration: none; }
+        .rb-footer a:hover { color: #fff; }
 
-        @keyframes scanline {
-            0% { transform: scaleX(0); transform-origin: left; }
-            50% { transform: scaleX(1); transform-origin: left; }
-            51% { transform: scaleX(1); transform-origin: right; }
-            100% { transform: scaleX(0); transform-origin: right; }
-        }
-        @keyframes rbFadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes rbPopIn { from { transform: scale(0); } to { transform: scale(1); } }
+        @keyframes rbFadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        @keyframes rbPopIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     `;
 
     const styleEl = document.createElement('style');
